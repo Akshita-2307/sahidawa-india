@@ -1,11 +1,13 @@
 import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
+
+// Load environment variables before other imports use process.env
+dotenv.config();
+
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
-
-// Load environment variables
-dotenv.config();
+import supabase from './db/supabase';
 
 const app: Express = express();
 const port = process.env.PORT || 4000;
@@ -23,9 +25,38 @@ app.get('/', (req: Request, res: Response) => {
   res.send('SahiDawa-India API is running successfully!');
 });
 
-// 2. Health Check Route
-app.get('/health', (req: Request, res: Response) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+// 2. Health Check Route — verifies Supabase DB connectivity
+app.get('/health', async (req: Request, res: Response) => {
+  try {
+    // Run a lightweight test query to confirm DB connection is alive
+    const { error } = await supabase
+      .from('medicines')
+      .select('id')
+      .limit(1);
+
+    if (error) {
+      return res.status(503).json({
+        status: 'degraded',
+        db: 'unreachable',
+        error: error.message,
+        timestamp: new Date().toISOString(),
+      });
+    }
+
+    return res.json({
+      status: 'ok',
+      db: 'connected',
+      timestamp: new Date().toISOString(),
+    });
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : 'Unknown error';
+    return res.status(500).json({
+      status: 'error',
+      db: 'unreachable',
+      error: message,
+      timestamp: new Date().toISOString(),
+    });
+  }
 });
 
 // Start the server
