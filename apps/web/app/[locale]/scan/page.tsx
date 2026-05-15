@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { Camera, ShieldCheck, Info, AlertCircle, Layers } from "lucide-react";
 import { Link } from "@/i18n/routing";
 import { PageHeader } from "../components/PageHeader";
+import { Home, Share2 } from "lucide-react";
+import { toast } from "sonner";
 
 export default function ScanPage() {
   const [scanning, setScanning] = useState(true);
@@ -32,6 +34,50 @@ export default function ScanPage() {
       reader.readAsDataURL(file);
     }
   };
+
+  const handleShare = async () => {
+    if(!result) return;
+
+    const shareText = `
+    Medicine: Authentic Medicine
+    Batch No: AUG625D
+    Expiry: 12/2027
+    Status: Verified by CDSCO Database
+    `.trim();
+
+    const shareData = {
+      title: "Medicine Verification Result",
+      text: `${shareText}\n\n`,
+      url: window.location.href,
+    };
+
+    try {
+      if (
+      typeof navigator !== "undefined" &&
+      navigator.share &&
+      (!navigator.canShare || navigator.canShare(shareData))) {
+        
+        await navigator.share(shareData);
+
+        toast.success("Verification result shared successfully");
+      } else {
+
+        await navigator.clipboard.writeText(
+          `${shareText}\n\n${window.location.href}`);
+
+        toast.success("Verification result copied to clipboard");
+      }
+    } catch (error: any) {
+      if (
+        error?.name === "AbortError" || 
+        String(error).includes("Share canceled") || 
+        String(error).includes("AbortError")
+      ) {
+        return; 
+      }
+      toast.error("Failed to share result");
+    }
+  }
 
   return (
     <div className="min-h-screen bg-black text-white font-sans relative flex flex-col">
@@ -126,9 +172,32 @@ export default function ScanPage() {
                   >
                     Scan Another
                   </button>
-                  <Link href="/" className="text-sm font-bold text-slate-400 hover:text-slate-600 transition-colors">
-                    Back to Home
-                  </Link>
+                  <div className="w-full grid grid-cols-2 gap-3 pt-1">
+                    <Link
+                      href="/"
+                      className="group flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-slate-100 border border-slate-200 text-slate-700 font-semibold hover:bg-slate-200 hover:border-slate-300 active:scale-[0.98] transition-all duration-200"
+                    >
+                       <Home
+                        size={19}
+                        className="transition-transform duration-200 group-hover:-translate-x-0.5"
+                      />
+                      <span>Home</span>
+                     
+                    </Link>
+
+                    <button
+                      type="button"
+                      onClick={handleShare}
+                      className="group flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-slate-100 border border-slate-200 text-slate-700 font-semibold hover:bg-slate-200 hover:border-slate-300 active:scale-[0.98] transition-all duration-200"
+                    >
+                      <Share2
+                        size={19}
+                        className="transition-transform duration-200 group-hover:-translate-x-0.5"
+                      />
+                      <span>Share</span>
+                      
+                    </button>
+                  </div>
                </div>
             </div>
           </div>
