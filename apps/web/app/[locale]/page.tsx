@@ -51,15 +51,15 @@ export default function SahiDawaHome() {
 
           <div className="flex items-center gap-2 md:gap-4">
             <nav className="hidden lg:flex items-center gap-6 text-sm font-semibold text-slate-600" aria-label="Main navigation">
-              <button className="hover:text-emerald-600 transition-colors">
+              <Link href="/how-it-works" className="hover:text-emerald-600 transition-colors">
                 {t('Navigation.how_it_works')}
-              </button>
-              <button className="hover:text-emerald-600 transition-colors">
+              </Link>
+              <Link href="/alerts" className="hover:text-emerald-600 transition-colors">
                 {t('Navigation.alerts')}
-              </button>
-              <button className="hover:text-emerald-600 transition-colors">
+              </Link>
+              <Link href="/map" className="hover:text-emerald-600 transition-colors">
                 {t('Navigation.pharmacy_map')}
-              </button>
+              </Link>
             </nav>
             <LanguageSwitcher />
           </div>

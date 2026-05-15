@@ -17,14 +17,9 @@
     "express-rate-limit": "^8.5.1",
     "helmet": "^8.1.0",
     "morgan": "^1.10.0",
-<<<<<<< HEAD
-    "redis": "^4.7.0",
-    "zod": "^4.4.3"
-=======
     "redis": "^5.12.1",
     "zod": "^4.4.3",
     "winston": "^3.19.0"
->>>>>>> origin/main
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
