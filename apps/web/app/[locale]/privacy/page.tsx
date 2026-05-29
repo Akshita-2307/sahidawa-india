@@ -1,5 +1,7 @@
 import { Lock, Cookie, Star, ClipboardList, Search, Link as LinkIcon, Cloud, Database, Map, Bot, ShieldCheck, Users, Mail, Calendar } from "lucide-react";
 
+const CONTACT_EMAIL = process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "contact@sahidawa.in";
+
 export default function PrivacyPolicyPage() {
     return (
         <main className="min-h-screen bg-(--color-surface-page) text-(--color-text-primary)">
@@ -180,9 +182,12 @@ export default function PrivacyPolicyPage() {
                         <p className="mb-3 text-sm text-(--color-text-secondary)">
                             For privacy-related queries, reach us at:
                         </p>
-                        <span className="inline-block rounded-lg border border-emerald-200 dark:border-emerald-900/30 bg-emerald-50 dark:bg-emerald-950/20 px-4 py-2 text-sm font-semibold text-emerald-700 dark:text-emerald-400">
-                            [ADMIN_EMAIL]
-                        </span>
+                        <a
+                            href={`mailto:${CONTACT_EMAIL}`}
+                            className="inline-block rounded-lg border border-emerald-200 dark:border-emerald-900/30 bg-emerald-50 dark:bg-emerald-950/20 px-4 py-2 text-sm font-semibold text-emerald-700 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 transition-colors"
+                        >
+                            {CONTACT_EMAIL}
+                        </a>
                         <p className="mt-4 text-sm text-(--color-text-secondary)">
                             Or join our community on{" "}
                             <a
