@@ -17,7 +17,7 @@ async function queryOverpass(query: string): Promise<any> {
   for (const mirror of OVERPASS_MIRRORS) {
     try {
       const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 15000);
+      const timeout = setTimeout(() => controller.abort(), 60000);
 
       const response = await fetch(mirror, {
         method: "POST",
@@ -169,7 +169,7 @@ export async function fetchPharmacies(
 ): Promise<OverpassPharmacy[]> {
   // Overpass QL query: find all pharmacy nodes within radius
   const query = `
-    [out:json][timeout:15];
+    [out:json][timeout:60];
     (
       node["amenity"="pharmacy"](around:${radiusMeters},${lat},${lng});
       node["healthcare"="pharmacy"](around:${radiusMeters},${lat},${lng});
@@ -224,7 +224,7 @@ export async function fetchPharmaciesInBounds(
   east: number
 ): Promise<OverpassPharmacy[]> {
   const query = `
-    [out:json][timeout:15];
+    [out:json][timeout:60];
     (
       node["amenity"="pharmacy"](${south},${west},${north},${east});
       node["healthcare"="pharmacy"](${south},${west},${north},${east});
